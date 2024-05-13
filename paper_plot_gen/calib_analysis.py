@@ -16,7 +16,9 @@ from scipy.optimize import curve_fit
 from decimal import Decimal
 
 # import functions from other file
-import Voltage_base_analysis as vba
+from wire_analysis.Voltage_base_analysis import (prep_data_calib,
+                                                 load_data)
+
 
 #plot Options
 import matplotlib as mpl
@@ -26,8 +28,13 @@ font = {#'family' : 'normal','weight' : 'bold',
         }
 mpl.rc('font', **font)
 
-plot_dir = os.path.dirname(os.path.abspath(__file__)) + os.sep + "output/"
-data_dir = os.path.dirname(os.path.abspath(__file__)) + os.sep + "data/"
+cwd = os.getcwd()
+print("cwd:", os.getcwd())
+
+plot_dir = (cwd + os.sep 
+            + "output/")
+data_dir = cwd + os.sep + ".." + os.sep + "data/"
+os.makedirs(plot_dir, exist_ok=True)
 #######################
 
 
@@ -1607,10 +1614,10 @@ def plot_avg_over_index(avg_dict, plotname):
 if __name__ =="__main__": 
 ################## 2022-12-08 New Automated Calib run 2022-12-09_calib_7
     run_name = "2023-01-09_calib_long"
-    vba.prep_data_calib("../SC_downloads/Wire/2023-01-09_calib_long.json"
-                     , run_name
+    prep_data_calib(filename  = "2023-01-09_calib_long.json"
+                     , dataname = run_name, data_dir = data_dir
                      )
-    data_dict = vba.load_data(run_name)
+    data_dict = load_data(run_name, data_dir = data_dir)
 
     #print('data_dict["R_Pt_1000"][10:-10]',data_dict["R_Pt_1000"][10:-10])
     out_dir = os.sep + run_name + os.sep
