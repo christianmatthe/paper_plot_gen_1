@@ -12,6 +12,7 @@
 *.7z
 # Reinclude the .pkl which contain the required data sets
 !data/**/*.pkl
+!data/**/*.json
 
 #data
 *.csv
