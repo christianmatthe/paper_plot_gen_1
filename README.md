@@ -11,9 +11,10 @@ Requires "wire_analysis" and "wire_detector" to be installed for many functions
 
 - Use `pip install .` to install wire detector as a local package.
 
-• "git clone https://github.com/christianmatthe/wire_analysis" to copy this repository
 
-• use "cd wire_analysis" to navigate to the wire_analysis folder containing setup.py
+- `git clone https://github.com/christianmatthe/wire_analysis` to copy this repository.
 
-• use "pip install ." to install wire_analysis as a local package
+- Use `cd wire_analysis` to navigate to the wire_analysis folder containing `setup.py`
+
+- Use `pip install .` to install wire detector as a local package.
 
