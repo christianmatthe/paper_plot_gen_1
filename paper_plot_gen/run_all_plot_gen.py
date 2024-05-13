@@ -10,3 +10,7 @@ os.system(f"python {filename}")
 filename = ("Tschersich_shape_2024-04-17_paper_fBB_heatshield.py")
 print(f"Running {filename}")
 os.system(f"python {filename}")
+
+filename = ("calib_analysis.py")
+print(f"Running {filename}")
+os.system(f"python {filename}")
