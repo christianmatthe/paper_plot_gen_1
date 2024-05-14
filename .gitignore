@@ -17,10 +17,10 @@
 #data
 *.csv
 *.txt
-*.json
+# *.json
 *.xlsx
 # Reinclude the .json in "scripts" so that the run_dict stay saved for later reevaluation
-!scripts/**/*.json
+# !scripts/**/*.json
 
 #vscode
 .vscode
