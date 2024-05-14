@@ -1,0 +1,62 @@
+{
+    "out_dir_base": "C:\\Users\\Christian\\Documents\\StudiumPhD\\python\\paper_plot_gen_1\\paper_plot_gen\\2024-04-15_3-point_efficiency_1sccm_recalib\\output\\",
+    "analysis_run_name": "1sccm_720TC_recalib",
+    "extractor_dict_path": "../../data/2023-04-21_1sccm_15A_TC_z-scan_jf_wire_recalib\\extractor_dict.json",
+    "z_list_unsorted": [
+        -11,
+        -10,
+        -9,
+        -8,
+        -7,
+        -6,
+        -5,
+        -4,
+        -3.5,
+        -3,
+        -2.5,
+        -2,
+        -1.5,
+        -1,
+        -0.5,
+        0,
+        0.5,
+        1,
+        1.5,
+        2,
+        2.5,
+        3,
+        3.5,
+        4,
+        4.5,
+        5,
+        5.5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        14,
+        16,
+        18,
+        20
+    ],
+    "selection_indices": [
+        3,
+        100000,
+        1
+    ],
+    "fit_start": {
+        "l_eff": 4.1,
+        "theta_max": 0.41015237421866746,
+        "z0": 1.51,
+        "A": 0.02415,
+        "P_0": -0.0,
+        "y0": 35.17,
+        "A_bound": [
+            0.007245,
+            0.07245
+        ]
+    }
+}
