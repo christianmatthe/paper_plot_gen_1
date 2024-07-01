@@ -58,7 +58,7 @@ if __name__ =="__main__":
         plot_path = (plot_dir + run_name + os.sep 
                      + f"{i}_{z:.2f}mm" + os.sep
                      + "paper" )
-        os.makedirs(plot_path)
+        os.makedirs(plot_path, exist_ok=True)
         ext.plot_all_ABA_fit_paper(
                             plot_path = plot_path,
                                 )

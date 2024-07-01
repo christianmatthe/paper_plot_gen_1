@@ -27,6 +27,21 @@ font = {#'family' : 'normal','weight' : 'bold',
         #,'serif':['Helvetica']
         }
 mpl.rc('font', **font)
+# #########Bruna requested options:
+# font = {#'family' : 'normal','weight' : 'bold',
+#         'size'   : 20
+#         #,'serif':['Helvetica']
+#         }
+# mpl.rc('font', **font)
+# rc_legend = {"fontsize" : 18}
+# mpl.rc('legend', **rc_legend)
+# # mpl.rc('lines', linewidth=3.5)
+# # mpl.rc("markers", markersize=3.5)
+# rc_plot = {"linewidth":2, "markersize":6}
+# mpl.rc('lines', **rc_plot)
+# mpl.rcParams['lines.markeredgecolor']='k'#black edges on symbols
+# # mpl.rcParams['errorbar.elinewidth']=2 #doesn't work
+# ###############
 
 cwd = os.getcwd()
 print("cwd:", os.getcwd())
@@ -932,7 +947,14 @@ def plot_poly_k_P_over_R(avg_dict, plotname):
     p_arr = i_arr * v_arr
     r_arr = v_arr / i_arr
     r_err = R_err(i_arr, i_err, v_arr, v_err)
-    p_err = P_err(i_arr, i_err, v_arr, v_err)
+
+    #HACK hackily propagate R errors into P erros to make them visible
+    # "kind of" makes this orthogonal distance regression
+    k_hack = 7.4 # µW per Ohm
+    p_err = np.sqrt(
+        P_err(i_arr, i_err, v_arr, v_err)**2 
+        + (r_err * k_hack)**2
+        )
     #########
     # Fit original data with a 4th order polynomial, and then derive.
     # fit_func = lambda x,c0,c1,c2,c3,c4: (
@@ -940,7 +962,7 @@ def plot_poly_k_P_over_R(avg_dict, plotname):
 
     fit_func = lambda x,c4,c3,c2,c1,c0: np.poly1d([c4, c3, c2, c1, c0])(x)
     popt, pcov = curve_fit(fit_func, r_arr, p_arr,  #p0 = [0,0,0,0.135,66.7],
-                           sigma = P_err(i_arr, i_err, v_arr, v_err),
+                           sigma = p_err,
                         #    absolute_sigma=True,
                         #    bounds = ((0.05,60,-1),(1.0,75,10))
     )
@@ -950,8 +972,8 @@ def plot_poly_k_P_over_R(avg_dict, plotname):
     # # with errorbars
     ax1.errorbar(r_arr ,
              p_arr,
-             yerr = P_err(i_arr, i_err, v_arr, v_err),
-             xerr = R_err(i_arr, i_err, v_arr, v_err),
+             yerr = p_err,
+             xerr = r_err,
              fmt = ".",
              # markersize=1,
              label = f"data")
@@ -994,8 +1016,8 @@ def plot_poly_k_P_over_R(avg_dict, plotname):
     ### ax1
     ax1.errorbar(r_arr ,
              p_arr,
-             yerr = R_err(i_arr, i_err, v_arr, v_err),
-             xerr = P_err(i_arr, i_err, v_arr, v_err),
+             yerr = r_err,
+             xerr = p_err,
              fmt = ".",
              # markersize=1,
              label = r"data, $\chi^2_{red}$"+" = {:2.2f} ".format(chi2_red))
@@ -1019,8 +1041,8 @@ def plot_poly_k_P_over_R(avg_dict, plotname):
 
     ax2.errorbar(r_arr ,
              residuals,
-             yerr = R_err(i_arr, i_err, v_arr, v_err),
-             xerr = P_err(i_arr, i_err, v_arr, v_err),
+             yerr = p_err,
+             xerr = r_err,
              fmt = ".",
              # markersize=1,
              label = f"data")

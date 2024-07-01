@@ -14,11 +14,28 @@ from wire_analysis.flow_on_off_cycle_analysis import (
 
 #plot Options
 import matplotlib as mpl
+# font = {#'family' : 'normal','weight' : 'bold',
+#         'size'   : 16
+#         #,'serif':['Helvetica']
+#         }
+# mpl.rc('font', **font)
+
+#########Bruna requested options:
 font = {#'family' : 'normal','weight' : 'bold',
-        'size'   : 16
+        'size'   : 20
         #,'serif':['Helvetica']
         }
 mpl.rc('font', **font)
+rc_legend = {"fontsize" : 18}
+mpl.rc('legend', **rc_legend)
+# mpl.rc('lines', linewidth=3.5)
+# mpl.rc("markers", markersize=3.5)
+rc_plot = {"linewidth":2, "markersize":6}
+mpl.rc('lines', **rc_plot)
+# mpl.rcParams['lines.marker']='x'#black edges on symbols
+# mpl.rcParams['lines.markeredgecolor']='k'#black edges on symbols
+# mpl.rcParams['errorbar.elinewidth']=2 #doesn't work
+###############
 
 
 # Set working directory to the location of this file, if it was exectued from
@@ -108,8 +125,10 @@ for i,filename in enumerate(filename_list):
     pd_dict[indicator_list[i]]["index"] = i
     pd_dict[indicator_list[i]]["T"] = T_lst[i]
     ### ax1
+    # ax1.errorbar(pd["z_arr"], pd["p_arr"],yerr = pd["p_err_arr"], fmt = ".",
+    #             label = (f"{indicator_list[i]} ~ {T_lst[i]:.1f}K"))
     ax1.errorbar(pd["z_arr"], pd["p_arr"],yerr = pd["p_err_arr"], fmt = ".",
-                label = (f"{indicator_list[i]} ~ {T_lst[i]:.1f}K"))
+            label = (r"$\rm{T}_{\rm{HABS}}$ $\approx$ "+f"{T_lst[i]:.0f}K"), markersize =10)
 
 
 ax1.set_ylabel(r"power [µW]")
