@@ -173,15 +173,30 @@ def three_point_CEB(low_pd, mid_pd, high_pd, ac_H = 1, gamma_H = 1):
             xs = Ts
             ps = [low_pd["p_arr"][i_low], mid_pd["p_arr"][i_mid]]
             ys = ps
+            ### Old simple and correct within its small scope
+            # m = (ys[1] - ys[0])/(xs[1] - xs[0])
+            # b = ys[0] - xs[0] * m
+            # p_fit = lambda T : m * T + b
+            # # These errors are in fact correlated in this scheeme
+            # m_err = np.sqrt((low_pd["p_err_arr"][i_low]/(xs[1] - xs[0]))**2 
+            #                 + (mid_pd["p_err_arr"][i_mid]/(xs[1] - xs[0]))**2)
+            # b_err = np.sqrt(mid_pd["p_err_arr"][i_mid]**2
+            #                 + (xs[0] * m_err)**2)
+            # p_fit_err =  lambda T : m_err * T + b_err
+            #### ABsolute mega HACK
+            # Rescale the temmperature axis (x) by Cv(T)/Cv(T0) 
+            # to include its effect
+            xs = xs * Cv(xs)
             m = (ys[1] - ys[0])/(xs[1] - xs[0])
             b = ys[0] - xs[0] * m
-            p_fit = lambda T : m * T + b
+            p_fit = lambda T : m * Cv(T) * T + b
             # These errors are in fact correlated in this scheeme
             m_err = np.sqrt((low_pd["p_err_arr"][i_low]/(xs[1] - xs[0]))**2 
                             + (mid_pd["p_err_arr"][i_mid]/(xs[1] - xs[0]))**2)
             b_err = np.sqrt(mid_pd["p_err_arr"][i_mid]**2
                             + (xs[0] * m_err)**2)
-            p_fit_err =  lambda T : m_err * T + b_err
+            p_fit_err =  lambda T : m_err * Cv(T)* T + b_err
+
 
             #Calculate excess power at high T
             p_excess = high_pd["p_arr"][i] - p_fit(high_pd["T"])
@@ -380,11 +395,11 @@ print("default fit wait ~1min")
 beamfit.default_fit()
 beamfit.save_json_run_dict(dict_path = beamfit.out_dir 
                            + "default_fit_"+  filename)
-print("custom fit wait ~1min")
-beamfit.custom_data_fit(z_arr=np.asarray(z_lst).flatten(),
-                         p_arr=np.array(p_excess_lst).flatten()
-                        , p_err_arr = np.array(p_excess_err_lst).flatten()
-                        )
+# print("custom fit wait ~1min")
+# beamfit.custom_data_fit(z_arr=np.asarray(z_lst).flatten(),
+#                          p_arr=np.array(p_excess_lst).flatten()
+#                         , p_err_arr = np.array(p_excess_err_lst).flatten()
+#                         )
 ########################################
 
 # ################################
