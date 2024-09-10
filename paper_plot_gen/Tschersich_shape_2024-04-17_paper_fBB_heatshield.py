@@ -16,7 +16,8 @@ os.makedirs(results_dir, exist_ok=True)
 os.makedirs(plot_dir, exist_ok=True)
 d = 5
 i_current = 1
-exp_list = [14.65,15.65,16.65,17.65,18.65]
+# exp_list = [14.65,15.65,16.65,17.65,18.65]
+exp_list = [16.65,17.65]
 crack_eff = 0.1
 #exp_list = np.linspace(14,18,num = 5)  # later normalized to per cm**2 
 l_beam_list = [2]  # in cm  (made as wide as wire, to make thermal hit all 
@@ -125,6 +126,8 @@ for l_wire in l_wire_list:
                 wire.plot_heat_flow(plot_dir + "heat_flow/{}".format(run_name))
                 wire.plot_heat_flow(plot_dir + "heat_flow/log_{}".format(
                                     run_name), log_y =True)
+                os.makedirs(plot_dir + "T_final/", exist_ok=True)
+                wire.plot_T_final(plot_dir + "T_final/{}".format(run_name))
 
                 wire.save(results_dir + "{}".format(run_name))
 

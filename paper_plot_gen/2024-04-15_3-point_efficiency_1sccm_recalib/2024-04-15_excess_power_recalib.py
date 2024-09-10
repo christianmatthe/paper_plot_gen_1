@@ -127,11 +127,14 @@ for i,filename in enumerate(filename_list):
     ### ax1
     # ax1.errorbar(pd["z_arr"], pd["p_arr"],yerr = pd["p_err_arr"], fmt = ".",
     #             label = (f"{indicator_list[i]} ~ {T_lst[i]:.1f}K"))
+    # ax1.errorbar(pd["z_arr"], pd["p_arr"],yerr = pd["p_err_arr"], fmt = ".",
+    #         label = (r"$\rm{T}_{\rm{HABS}}$ $\approx$ "+f"{T_lst[i]:.0f}K"), markersize =10)
     ax1.errorbar(pd["z_arr"], pd["p_arr"],yerr = pd["p_err_arr"], fmt = ".",
-            label = (r"$\rm{T}_{\rm{HABS}}$ $\approx$ "+f"{T_lst[i]:.0f}K"), markersize =10)
+            label = (r"$P_{\rm{meas}}(\rm{T}$ $\approx$ "+f"{T_lst[i]:.0f}K)"), 
+            markersize =10)
 
 
-ax1.set_ylabel(r"power [µW]")
+ax1.set_ylabel(r"Power [µW]")
 ax1.set_xlabel(x_label)
 
 ax1.grid(True)
@@ -333,6 +336,104 @@ z_lst, ceb_lst_ac_H_lit,ceb_err_lst_ac_H_lit, p_excess_lst,p_excess_err_lst = th
 # ax1.cla()
 # fig.clf()
 # plt.close()
+#############################
+# plot ceb_lst
+# Start plot:
+plotname = "CEB_plot"
+fig = plt.figure(0, figsize=(8,6.5), dpi =300)
+ax1=plt.gca()
+x_label = r"$z_{pos}$ [mm]"
+# ax1.errorbar(pd["z_arr"], pd["p_arr"],yerr = pd["p_err_arr"], fmt = ".",
+#                 label = (f"{indicator_list[i]} ~ {T_lst[i]:.1f}K"))
+# ax1.scatter(z_lst, ceb_lst, #fmt = ".",
+#                 label = "ac_H = 1" + r",$\gamma = 1$"
+#                 )
+ax1.errorbar(z_lst, ceb_lst, fmt = ".", yerr = ceb_err_lst,
+                label = "ac_H = 1" + r",$\gamma = 1$"
+                )
+
+ax1.set_ylabel(r"dissociation Efficiency (estimate)")
+ax1.set_xlabel(x_label)
+
+ax1.grid(True)
+ax1.legend(shadow=True, fontsize = 13)
+# ax1.tight_layout()
+
+
+fig.tight_layout()
+
+format_im = 'png' #'pdf' or png
+dpi = 300
+plt.savefig(out_dir + plotname
+            + '.{}'.format(format_im),
+            format=format_im, dpi=dpi)
+# Now plotalternate setting sinsame graph
+ax1.errorbar(z_lst, ceb_lst_ac_H_lit, fmt = ".",yerr = ceb_err_lst_ac_H_lit,
+                label = "ac_H = 0.65" + r",$\gamma = 0.03$"
+                )
+ax1.legend(shadow=True, fontsize = 13)
+plt.savefig(out_dir + plotname + "_compare"
+            + '.{}'.format(format_im),
+            format=format_im, dpi=dpi)
+# plt.show()
+ax1.cla()
+fig.clf()
+plt.close()
+
+
+# plot ceb_lst
+# Start plot:
+plotname = "CEB_plot_spread"
+fig = plt.figure(0, figsize=(8,6.5), dpi =300)
+ax1=plt.gca()
+x_label = r"$z_{pos}$ [mm]"
+# ax1.errorbar(pd["z_arr"], pd["p_arr"],yerr = pd["p_err_arr"], fmt = ".",
+#                 label = (f"{indicator_list[i]} ~ {T_lst[i]:.1f}K"))
+ax1.scatter(z_lst, ceb_lst, #fmt = ".",
+                label = "ac_H = 1" + r",$\gamma = 1$"
+                )
+ax1.scatter(z_lst, ceb_lst_ac_H_lit, #fmt = ".",
+                label = "ac_H = 0.65" + r",$\gamma = 0.03$"
+                )
+# maximize CEB: 0.65+-0.2, 0.03+-0.01
+ac_H = 0.45
+gamma_H = 0.01
+z_lst, ceb_lst_ac_H_lit, ceb_err_lst_ac_H_lit, p_excess_lst,p_excess_err_lst  = three_point_CEB(
+    pd_dict["0A"],pd_dict["390TC"],pd_dict["720TC"],ac_H=ac_H, gamma_H=gamma_H)
+ax1.scatter(z_lst, ceb_lst_ac_H_lit, #fmt = ".",
+                label = (f"ac_H = {ac_H:.2f}" + r",$\gamma =$" 
+                         + f"{gamma_H:.2f}")
+                )
+# minimize CEB: 0.65+-0.2, 0.03+-0.01
+ac_H = 0.85
+gamma_H = 0.05
+z_lst, ceb_lst_ac_H_lit, ceb_err_lst_ac_H_lit, p_excess_lst,p_excess_err_lst = three_point_CEB(
+    pd_dict["0A"],pd_dict["390TC"],pd_dict["720TC"],ac_H=ac_H, gamma_H=gamma_H)
+ax1.scatter(z_lst, ceb_lst_ac_H_lit, #fmt = ".",
+                label = (f"ac_H = {ac_H:.2f}" + r",$\gamma =$" 
+                         + f"{gamma_H:.2f}")
+                )
+
+
+ax1.set_ylabel(r"dissociation Efficiency (estimate)")
+ax1.set_xlabel(x_label)
+
+ax1.grid(True)
+ax1.legend(shadow=True, fontsize = 13)
+# ax1.tight_layout()
+fig.tight_layout()
+
+format_im = 'png' #'pdf' or png
+dpi = 300
+plt.savefig(out_dir + plotname
+            + '.{}'.format(format_im),
+            format=format_im, dpi=dpi)
+# plt.show()
+ax1.cla()
+fig.clf()
+plt.close()
+
+
 ###################### Previous is reuse of old code to get p_excess
 
 # Plot all the 1sccm runs in one plot
@@ -392,7 +493,7 @@ beamfit.custom_fit(z_arr=np.asarray(z_lst).flatten(),
                         , p_err_arr = np.array(p_excess_err_lst).flatten()
                         )
 print("default fit wait ~1min")
-beamfit.default_fit()
+# beamfit.default_fit()
 beamfit.save_json_run_dict(dict_path = beamfit.out_dir 
                            + "default_fit_"+  filename)
 # print("custom fit wait ~1min")

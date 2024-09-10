@@ -986,7 +986,7 @@ def plot_poly_k_P_over_R(avg_dict, plotname):
 
     #plt.xticks(rotation = 45)
 
-    ax1.set_ylabel(r"power [µW]")
+    ax1.set_ylabel(r"$P_{el}$ [µW]")
     ax1.set_xlabel(r"Resistance [$\Omega$]")
 
     plt.grid(True)
@@ -1020,7 +1020,9 @@ def plot_poly_k_P_over_R(avg_dict, plotname):
              xerr = p_err,
              fmt = ".",
              # markersize=1,
-             label = r"data, $\chi^2_{red}$"+" = {:2.2f} ".format(chi2_red))
+             label = r"data"
+             #, $\chi^2_{red}$"+" = {:2.2f} ".format(chi2_red)
+             )
 
     # Plot Fit
     xdata=r_arr
@@ -1030,7 +1032,7 @@ def plot_poly_k_P_over_R(avg_dict, plotname):
 
     #plt.xticks(rotation = 45)
 
-    ax1.set_ylabel(r"power [µW]")
+    ax1.set_ylabel(r"$P_{el}$ [µW]")
     ax1.set_xlabel(r"Resistance [$\Omega$]")
 
     ax1.grid(True)
@@ -1096,7 +1098,8 @@ def plot_poly_k_P_over_R(avg_dict, plotname):
         # TODO Check this
         delta_p = p_arr[j]-p_arr[i]
         delta_r = r_arr[j]-r_arr[i]
-        s_p = np.sqrt(p_err[i]**2 + p_err[j]**2)
+        s_p = np.sqrt(P_err(i_arr, i_err, v_arr, v_err)[i]**2 
+                      + P_err(i_arr, i_err, v_arr, v_err)[j]**2)
         s_r = np.sqrt(r_err[i]**2 + r_err[j]**2)
         k_err = np.sqrt(
             ((1 / delta_r) * s_p)**2
@@ -1113,10 +1116,10 @@ def plot_poly_k_P_over_R(avg_dict, plotname):
     ax1.errorbar(r_arr[:-1] ,
              k_arr,
              yerr = k_errs,
-             xerr = R_err(i_arr, i_err, v_arr, v_err)[:-1],
+             xerr = r_err[:-1],
              fmt = ".",
              # markersize=1,
-             label = f"data")
+             label = r"$\Delta P / \Delta R$ between adjacent")
 
     #plt.xticks(rotation = 45)
 
@@ -1127,7 +1130,7 @@ def plot_poly_k_P_over_R(avg_dict, plotname):
     # Plot derivative based k
     xdata=r_arr
     plt.plot(xdata, (np.poly1d([*popt]).deriv()(xdata)), 'r-',
-         label="k from deriv"
+         label="dP/dR of fit"
                 )
     # Aditionally plot k derived from  fit to power over R rather than other
 
